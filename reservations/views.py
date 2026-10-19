@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Reservation, Table
 
+
 # Create your views here.
 def reservation_login(request):
     if request.method == "POST":
@@ -21,5 +22,7 @@ def table_selection(request):
     reservation = Reservation.objects.get(id=reservation_id)
 
     tables = Table.objects.all()
+    for table in tables:
+        table.available_seats = table.seat_set.filter(seatassignment__isnull=True).count()
 
     return render(request, "reservations/table_selection.html", {"reservation": reservation, "tables": tables})

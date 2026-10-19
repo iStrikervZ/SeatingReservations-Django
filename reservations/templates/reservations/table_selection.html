@@ -10,6 +10,7 @@
 <p>Welcome, {{reservation.first_name}}!</p>
 {% for table in tables %}
 <p>Table {{table.table_number}}</p>
+<p>Total Seats: {{table.available_seats}}</p>
 {% endfor %}
 
 </body>
