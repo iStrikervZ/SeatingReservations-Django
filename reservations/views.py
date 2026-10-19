@@ -19,6 +19,10 @@ def reservation_login(request):
 
 def table_selection(request):
     reservation_id = request.session.get("reservation_id")
+
+    if not reservation_id:
+        return redirect("reservation_login")
+
     reservation = Reservation.objects.get(id=reservation_id)
 
     if reservation.is_confirmed:
@@ -32,6 +36,10 @@ def table_selection(request):
 
 def seat_selection(request, table_id):
     reservation_id = request.session.get("reservation_id")
+
+    if not reservation_id:
+        return redirect("reservation_login")
+
     reservation = Reservation.objects.get(id=reservation_id)
 
     if reservation.is_confirmed:
@@ -43,16 +51,12 @@ def seat_selection(request, table_id):
         seat_id = request.POST.get("seat_id", "")
         remove_seat_id = request.POST.get("remove_seat_id", "")
 
-        print("seat_id", seat_id)
-        print("remove_seat_id", remove_seat_id)
-
         # User clicked YOUR SEAT - REMOVE
         if remove_seat_id:
-           deleted = SeatAssignment.objects.filter(
+           SeatAssignment.objects.filter(
                 seat_id=remove_seat_id,
                 reservation=reservation
            ).delete()
-           print("Deleted", deleted)
 
         # User clicked an AVAILABLE seat
         elif seat_id:
@@ -99,6 +103,10 @@ def seat_selection(request, table_id):
 
 def review_reservation(request):
     reservation_id = request.session.get("reservation_id")
+
+    if not reservation_id:
+        return redirect("reservation_login")
+
     reservation = Reservation.objects.get(id=reservation_id)
 
     if reservation.is_confirmed:
@@ -117,6 +125,10 @@ def review_reservation(request):
 
 def confirmation(request):
     reservation_id = request.session.get("reservation_id")
+
+    if not reservation_id:
+        return redirect("reservation_login")
+
     reservation = Reservation.objects.get(id=reservation_id)
     seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
 
