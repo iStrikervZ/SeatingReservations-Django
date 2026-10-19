@@ -21,6 +21,9 @@ def table_selection(request):
     reservation_id = request.session.get("reservation_id")
     reservation = Reservation.objects.get(id=reservation_id)
 
+    if reservation.is_confirmed:
+        return redirect("confirmation")
+
     tables = Table.objects.all()
     for table in tables:
         table.available_seats = table.seat_set.filter(seatassignment__isnull=True).count()
@@ -30,6 +33,9 @@ def table_selection(request):
 def seat_selection(request, table_id):
     reservation_id = request.session.get("reservation_id")
     reservation = Reservation.objects.get(id=reservation_id)
+
+    if reservation.is_confirmed:
+        return redirect("confirmation")
 
     table = Table.objects.get(id=table_id)
 
@@ -94,6 +100,10 @@ def seat_selection(request, table_id):
 def review_reservation(request):
     reservation_id = request.session.get("reservation_id")
     reservation = Reservation.objects.get(id=reservation_id)
+
+    if reservation.is_confirmed:
+        return redirect("confirmation")
+
     seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
     if request.method == "POST":
         confirm = request.POST.get("confirm","")
