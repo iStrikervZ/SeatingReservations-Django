@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # Create your models here.
@@ -6,7 +7,7 @@ class Reservation(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    guest_count = models.PositiveIntegerField()
+    guest_count = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.reservation_code})"
@@ -31,3 +32,8 @@ class Seat(models.Model):
             )
         ]
 
+class SeatAssignment(models.Model):
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
+    seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.reservation.first_name} {self.reservation.last_name} ({self.reservation.reservation_code}) - Table {self.seat.table.table_number} Seat {self.seat.seat_number}"
