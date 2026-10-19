@@ -19,4 +19,15 @@ class Table(models.Model):
 
 class Seat(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
-    seat_number = models.PositiveIntegerField(unique=True)
+    seat_number = models.PositiveIntegerField()
+    def __str__(self):
+        return f"Table {self.table.table_number} Seat {self.seat_number}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["table", "seat_number"],
+                name="unique_seat_per_table",
+            )
+        ]
+
