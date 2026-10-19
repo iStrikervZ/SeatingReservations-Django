@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Reservation
+from .models import Reservation, Table
 
 # Create your views here.
 def reservation_login(request):
@@ -20,4 +20,6 @@ def table_selection(request):
     reservation_id = request.session.get("reservation_id")
     reservation = Reservation.objects.get(id=reservation_id)
 
-    return render(request, "reservations/table_selection.html", {"reservation": reservation})
+    tables = Table.objects.all()
+
+    return render(request, "reservations/table_selection.html", {"reservation": reservation, "tables": tables})

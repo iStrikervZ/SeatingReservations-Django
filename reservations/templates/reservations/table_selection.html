@@ -8,5 +8,9 @@
 <h1>Choose Your Table</h1>
 
 <p>Welcome, {{reservation.first_name}}!</p>
+{% for table in tables %}
+<p>Table {{table.table_number}}</p>
+{% endfor %}
+
 </body>
 </html>
