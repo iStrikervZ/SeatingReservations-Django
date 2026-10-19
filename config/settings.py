@@ -83,7 +83,10 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": os.getenv("DATABASE_PASSWORD"),
         "HOST": "localhost",
-        "PORT": "5342",
+        "PORT": "5432",
+        "OPTIONS": {
+            "connect_timeout": 5,
+        }
     }
 }
 
