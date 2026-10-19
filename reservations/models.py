@@ -38,7 +38,7 @@ class SeatAssignment(models.Model):
     seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
 
     def clean(self):
-        current_seat_count = SeatAssignment.objects.filter(reservation=self.reservation).count()
+        current_seat_count = SeatAssignment.objects.filter(reservation=self.reservation).exclude(pk=self.pk).count()
         if current_seat_count >= self.reservation.guest_count:
             raise ValidationError("This reservation already has the maximum number of seats.")
 
