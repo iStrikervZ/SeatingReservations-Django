@@ -37,12 +37,16 @@ def seat_selection(request, table_id):
         seat_id = request.POST.get("seat_id", "")
         remove_seat_id = request.POST.get("remove_seat_id", "")
 
+        print("seat_id", seat_id)
+        print("remove_seat_id", remove_seat_id)
+
         # User clicked YOUR SEAT - REMOVE
         if remove_seat_id:
-            SeatAssignment.objects.filter(
+           deleted = SeatAssignment.objects.filter(
                 seat_id=remove_seat_id,
                 reservation=reservation
-            ).delete()
+           ).delete()
+           print("Deleted", deleted)
 
         # User clicked an AVAILABLE seat
         elif seat_id:

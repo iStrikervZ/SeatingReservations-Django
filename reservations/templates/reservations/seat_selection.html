@@ -13,7 +13,7 @@
 
 <p>Seat #{{ seat.seat_number}}</p>
 {% if seat.is_mine %}
-<button name="remove_seat_id" value="{{ seat_id }}">YOUR SEAT - REMOVE</button>
+<button name="remove_seat_id" value="{{ seat.id }}">YOUR SEAT - REMOVE</button>
     {% elif seat.is_taken%}
     <button disabled>RESERVED</button>
 {% else %}
