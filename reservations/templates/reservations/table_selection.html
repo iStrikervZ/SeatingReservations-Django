@@ -9,8 +9,9 @@
 
 <p>Welcome, {{reservation.first_name}}!</p>
 {% for table in tables %}
-<p>Table {{table.table_number}}</p>
-<p>Total Seats: {{table.available_seats}}</p>
+<a href="{% url 'seat_selection' table.id %}"><p>Table {{table.table_number}}</p></a>
+
+<p>Available Seats: {{table.available_seats}}</p>
 {% endfor %}
 
 </body>
