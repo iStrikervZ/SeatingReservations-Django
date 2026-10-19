@@ -65,6 +65,7 @@ def seat_selection(request, table_id):
                     reservation=reservation
                 )
 
+    selected_seat_count = SeatAssignment.objects.filter(reservation=reservation).count()
     # Get all 10 seats belonging to this table
     seats = table.seat_set.all()
 
@@ -84,6 +85,8 @@ def seat_selection(request, table_id):
         "reservations/seat_selection.html",
         {
             "seats": seats,
-            "table": table
+            "table": table,
+            "reservation":reservation,
+            "selected_seat_count": selected_seat_count
         }
     )
