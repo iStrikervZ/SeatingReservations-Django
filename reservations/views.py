@@ -1,5 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Reservation
 
 # Create your views here.
 def reservation_login(request):
+    if request.method == "POST":
+        try:
+            reservation_code = request.POST.get("reservation_code", "").strip().upper()
+
+            reservation = Reservation.objects.get(reservation_code=reservation_code)
+            request.session["reservation_id"] = reservation.id
+            return redirect("table_selection")
+
+        except Reservation.DoesNotExist:
+            return render(request, 'reservations/reservation_login.html',{"error": "Reservation code not found"})
+
     return render(request, 'reservations/reservation_login.html')
+
+def table_selection(request):
+    reservation_id = request.session.get("reservation_id")
+    reservation = Reservation.objects.get(id=reservation_id)
+
+    return render(request, "reservations/table_selection.html", {"reservation": reservation})

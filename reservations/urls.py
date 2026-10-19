@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.reservation_login, name='reservation_login'),
+    path("tables/", views.table_selection, name="table_selection"),
 ]
