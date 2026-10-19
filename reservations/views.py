@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Reservation, Table
+from .models import Reservation, Table, SeatAssignment, Seat
 
 
 # Create your views here.
@@ -28,8 +28,13 @@ def table_selection(request):
     return render(request, "reservations/table_selection.html", {"reservation": reservation, "tables": tables})
 
 def seat_selection(request, table_id):
-    table = Table.objects.get(id=table_id)
+    if request.method == "POST":
+        seat_id = request.POST.get("seat_id", "")
+        seat = Seat.objects.get(id=seat_id)
+        table = Table.objects.get(id=table_id)
 
-    seats = table.seat_set.all()
+        seats = table.seat_set.all()
+        for seat in seats:
+            seat.is_taken = SeatAssignment.objects.filter(seat=seat).exists()
 
-    return render(request, "reservations/seat_selection.html", {"seats":seats, "table":table})
+        return render(request, "reservations/seat_selection.html", {"seats":seats, "table":table})

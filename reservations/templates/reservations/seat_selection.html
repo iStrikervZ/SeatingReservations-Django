@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Table #{{ table.table_number }}</p>
+
+{% for seat in seats %}
+<form method = "post">
+    {% csrf_token %}
+
+<p>Seat #{{ seat.seat_number}}</p>
+{% if seat.is_taken %}
+<button disabled>TAKEN</button>
+{% else %}
+<button name="seat_id" value="{{ seat.id }}">AVAILABLE</button>
+{% endif %}
+</form>
+{% endfor %}
+</body>
+</html>
