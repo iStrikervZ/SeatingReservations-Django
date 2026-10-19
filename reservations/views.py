@@ -26,3 +26,10 @@ def table_selection(request):
         table.available_seats = table.seat_set.filter(seatassignment__isnull=True).count()
 
     return render(request, "reservations/table_selection.html", {"reservation": reservation, "tables": tables})
+
+def seat_selection(request, table_id):
+    table = Table.objects.get(id=table_id)
+
+    seats = table.seat_set.all()
+
+    return render(request, "reservations/seat_selection.html", {"seats":seats, "table":table})
