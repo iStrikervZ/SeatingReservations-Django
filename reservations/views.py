@@ -90,3 +90,24 @@ def seat_selection(request, table_id):
             "selected_seat_count": selected_seat_count
         }
     )
+
+def review_reservation(request):
+    reservation_id = request.session.get("reservation_id")
+    reservation = Reservation.objects.get(id=reservation_id)
+    seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
+    if request.method == "POST":
+        confirm = request.POST.get("confirm","")
+
+        if confirm == "yes":
+            reservation.is_confirmed = True
+            reservation.save()
+            return redirect("confirmation")
+
+    return render(request, "reservations/review_reservation.html", {"reservation": reservation, "seat_assignments": seat_assignments})
+
+def confirmation(request):
+    reservation_id = request.session.get("reservation_id")
+    reservation = Reservation.objects.get(id=reservation_id)
+    seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
+
+    return render(request, "reservations/confirmation.html", {"reservation": reservation, "seat_assignments": seat_assignments})

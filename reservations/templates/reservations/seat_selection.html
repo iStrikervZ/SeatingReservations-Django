@@ -8,14 +8,14 @@
 <p>Table #{{ table.table_number }}</p>
 <p>Seats selected: {{ selected_seat_count }} of {{ reservation.guest_count }}</p>
 {% if selected_seat_count == reservation.guest_count %}
-<button>Review & Confirm</button>
+    <a href="{% url 'review_reservation' %}">Review & Confirm</a>
 {% endif %}
 
 {% for seat in seats %}
 <form method = "post">
     {% csrf_token %}
 
-<p>Seat #{{ seat.seat_number}}</p>
+<p>Seat #{{ seat.seat_number }}</p>
 
 {% if seat.is_mine %}
 <button name="remove_seat_id" value="{{ seat.id }}">YOUR SEAT - REMOVE</button>

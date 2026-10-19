@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Seats Confirmed!</h1>
+
+<p>Thank you, {{ reservation.first_name }}</p>
+{% for assignment in seat_assignments %}
+<p>
+  Table {{ assignment.seat.table.table_number }}
+- Seat {{ assignment.seat.seat_number }}
+</p>
+{% endfor %}
+
+<p> Your seating reservation has been confirmed.
+Please contact staff if you need to make any changes
+</p>
+
+</body>
+</html>
