@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Reservation(models.Model):
@@ -35,5 +36,12 @@ class Seat(models.Model):
 class SeatAssignment(models.Model):
     reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
     seat = models.OneToOneField(Seat, on_delete=models.CASCADE)
+
+    def clean(self):
+        current_seat_count = SeatAssignment.objects.filter(reservation=self.reservation).count()
+        if current_seat_count >= self.reservation.guest_count:
+            raise ValidationError("This reservation already has the maximum number of seats.")
+
     def __str__(self):
         return f"{self.reservation.first_name} {self.reservation.last_name} ({self.reservation.reservation_code}) - Table {self.seat.table.table_number} Seat {self.seat.seat_number}"
+
