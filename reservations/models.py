@@ -9,6 +9,7 @@ class Reservation(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     guest_count = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
+    is_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.reservation_code})"

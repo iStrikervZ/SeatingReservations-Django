@@ -12,8 +12,10 @@
     {% csrf_token %}
 
 <p>Seat #{{ seat.seat_number}}</p>
-{% if seat.is_taken %}
-<button disabled>TAKEN</button>
+{% if seat.is_mine %}
+<button name="remove_seat_id" value="{{ seat_id }}">YOUR SEAT - REMOVE</button>
+    {% elif seat.is_taken%}
+    <button disabled>RESERVED</button>
 {% else %}
 <button name="seat_id" value="{{ seat.id }}">AVAILABLE</button>
 {% endif %}

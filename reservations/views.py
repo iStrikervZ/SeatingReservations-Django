@@ -28,13 +28,58 @@ def table_selection(request):
     return render(request, "reservations/table_selection.html", {"reservation": reservation, "tables": tables})
 
 def seat_selection(request, table_id):
+    reservation_id = request.session.get("reservation_id")
+    reservation = Reservation.objects.get(id=reservation_id)
+
+    table = Table.objects.get(id=table_id)
+
     if request.method == "POST":
         seat_id = request.POST.get("seat_id", "")
-        seat = Seat.objects.get(id=seat_id)
-        table = Table.objects.get(id=table_id)
+        remove_seat_id = request.POST.get("remove_seat_id", "")
 
-        seats = table.seat_set.all()
-        for seat in seats:
-            seat.is_taken = SeatAssignment.objects.filter(seat=seat).exists()
+        # User clicked YOUR SEAT - REMOVE
+        if remove_seat_id:
+            SeatAssignment.objects.filter(
+                seat_id=remove_seat_id,
+                reservation=reservation
+            ).delete()
 
-        return render(request, "reservations/seat_selection.html", {"seats":seats, "table":table})
+        # User clicked an AVAILABLE seat
+        elif seat_id:
+            seat = Seat.objects.get(
+                id=seat_id,
+                table=table
+            )
+
+            current_seat_count = SeatAssignment.objects.filter(
+                reservation=reservation
+            ).count()
+
+            if current_seat_count < reservation.guest_count:
+                SeatAssignment.objects.create(
+                    seat=seat,
+                    reservation=reservation
+                )
+
+    # Get all 10 seats belonging to this table
+    seats = table.seat_set.all()
+
+    # Determine how each seat should appear
+    for seat in seats:
+        seat.is_taken = SeatAssignment.objects.filter(
+            seat=seat
+        ).exists()
+
+        seat.is_mine = SeatAssignment.objects.filter(
+            seat=seat,
+            reservation=reservation
+        ).exists()
+
+    return render(
+        request,
+        "reservations/seat_selection.html",
+        {
+            "seats": seats,
+            "table": table
+        }
+    )
