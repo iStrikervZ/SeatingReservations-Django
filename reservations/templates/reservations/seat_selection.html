@@ -11,6 +11,10 @@
     <a href="{% url 'review_reservation' %}">Review & Confirm</a>
 {% endif %}
 
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+
 {% for seat in seats %}
 <form method = "post">
     {% csrf_token %}

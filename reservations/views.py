@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db import transaction, IntegrityError
 from .models import Reservation, Table, SeatAssignment, Seat
 
 
@@ -36,7 +37,7 @@ def table_selection(request):
 
 def seat_selection(request, table_id):
     reservation_id = request.session.get("reservation_id")
-
+    error = None
     if not reservation_id:
         return redirect("reservation_login")
 
@@ -51,29 +52,46 @@ def seat_selection(request, table_id):
         seat_id = request.POST.get("seat_id", "")
         remove_seat_id = request.POST.get("remove_seat_id", "")
 
-        # User clicked YOUR SEAT - REMOVE
         if remove_seat_id:
            SeatAssignment.objects.filter(
                 seat_id=remove_seat_id,
                 reservation=reservation
            ).delete()
 
-        # User clicked an AVAILABLE seat
+
         elif seat_id:
-            seat = Seat.objects.get(
-                id=seat_id,
-                table=table
-            )
+            try:
+                with transaction.atomic():
+                    locked_reservation = Reservation.objects.select_for_update().get(
+                        id=reservation_id
+                    )
 
-            current_seat_count = SeatAssignment.objects.filter(
-                reservation=reservation
-            ).count()
 
-            if current_seat_count < reservation.guest_count:
-                SeatAssignment.objects.create(
-                    seat=seat,
-                    reservation=reservation
-                )
+                    seat = Seat.objects.select_for_update().get(
+                        id=seat_id,
+                        table=table
+                    )
+
+                    current_seat_count = SeatAssignment.objects.filter(
+                        reservation=locked_reservation
+                    ).count()
+
+                    seat_is_taken = SeatAssignment.objects.filter(seat=seat).exists()
+
+                    if seat_is_taken:
+                        error = "This seat was reserved by another guest. Please choose another seat."
+
+
+                    elif current_seat_count >= locked_reservation.guest_count:
+                        error = "You have already selected the maximum number of seats."
+
+                    else:
+                        SeatAssignment.objects.create(
+                            seat=seat,
+                            reservation=locked_reservation
+                        )
+            except IntegrityError:
+                error = "This seat was reserved by another guest. Please choose another seat."
 
     selected_seat_count = SeatAssignment.objects.filter(reservation=reservation).count()
     # Get all 10 seats belonging to this table
@@ -97,7 +115,8 @@ def seat_selection(request, table_id):
             "seats": seats,
             "table": table,
             "reservation":reservation,
-            "selected_seat_count": selected_seat_count
+            "selected_seat_count": selected_seat_count,
+            "error": error,
         }
     )
 
@@ -130,6 +149,10 @@ def confirmation(request):
         return redirect("reservation_login")
 
     reservation = Reservation.objects.get(id=reservation_id)
+
+    if not reservation.is_confirmed:
+        return redirect("table_selection")
+
     seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
 
     return render(request, "reservations/confirmation.html", {"reservation": reservation, "seat_assignments": seat_assignments})
