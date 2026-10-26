@@ -1,24 +1,49 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Table</title>
+    <link rel="stylesheet" href="{% static 'reservations/style.css' %}">
 </head>
 <body>
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
+
+<main class="table-page">
+
+    <div class="table-header">
+        <h1>Choose Your Table</h1>
+        <p>Welcome, {{ reservation.first_name }}!</p>
+        <p>Select a table to view its available seats.</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+  <div class="table-grid">
+
+    {% for table in tables %}
+
+        <a
+            href="{% url 'seat_selection' table.id %}"
+            class="table-card"
+        >
+            <span class="table-name">
+                Table {{ table.table_number }}
+            </span>
+
+            <span class="table-availability">
+                {{ table.available_seats }} seats available
+            </span>
+        </a>
+
     {% endfor %}
-{% endif %}
 
-<h1>Choose Your Table</h1>
+</div>
 
-<p>Welcome, {{reservation.first_name}}!</p>
-{% for table in tables %}
-<a href="{% url 'seat_selection' table.id %}"><p>Table {{table.table_number}}</p></a>
-
-<p>Available Seats: {{table.available_seats}}</p>
-{% endfor %}A
+</main>
 
 </body>
 </html>

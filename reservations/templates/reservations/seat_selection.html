@@ -1,36 +1,159 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Your Seat</title>
+
+    <link rel="stylesheet" href="{% static 'reservations/style.css' %}">
 </head>
+
 <body>
-<p>Table #{{ table.table_number }}</p>
-<p>Seats selected: {{ selected_seat_count }} of {{ reservation.guest_count }}</p>
-{% if selected_seat_count == reservation.guest_count %}
-    <a href="{% url 'review_reservation' %}">Review & Confirm</a>
-{% endif %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+<main class="seat-page">
 
-{% for seat in seats %}
-<form method = "post">
-    {% csrf_token %}
+    <!-- Page Header -->
+    <div class="seat-header">
+        <h1>Table {{ table.table_number }}</h1>
 
-<p>Seat #{{ seat.seat_number }}</p>
+        <p>
+            Seats selected:
+            <strong>
+                {{ selected_seat_count }} of {{ reservation.guest_count }}
+            </strong>
+        </p>
 
-{% if seat.is_mine %}
-<button name="remove_seat_id" value="{{ seat.id }}">YOUR SEAT - REMOVE</button>
-    {% elif seat.is_taken%}
-    <button disabled>RESERVED</button>
-{% else %}
-<button name="seat_id" value="{{ seat.id }}">AVAILABLE</button>
-{% endif %}
-</form>
-{% endfor %}
+        <p>Select your seat below.</p>
+    </div>
+
+
+    <!-- Django Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error-message">
+                {{ message }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- Seating Area -->
+    <div class="seat-layout">
+
+        <div class="table-diagram">
+
+            {% for seat in seats %}
+
+                <form
+                    method="post"
+                    class="seat-form seat-position-{{ seat.seat_number }}"
+                >
+                    {% csrf_token %}
+
+
+                    <!-- User's Selected Seat -->
+                    {% if seat.is_mine %}
+
+                        <button
+                            class="seat-button seat-mine"
+                            name="remove_seat_id"
+                            value="{{ seat.id }}"
+                        >
+                            <span>
+                                Seat {{ seat.seat_number }}
+                            </span>
+
+                            <small>
+                                Your Seat
+                            </small>
+                        </button>
+
+
+                    <!-- Seat Belongs to Someone Else -->
+                    {% elif seat.is_taken %}
+
+                        <button
+                            class="seat-button seat-taken"
+                            disabled
+                        >
+                            <span>
+                                Seat {{ seat.seat_number }}
+                            </span>
+
+                            <small>
+                                Reserved
+                            </small>
+                        </button>
+
+
+                    <!-- Available Seat -->
+                    {% else %}
+
+                        <button
+                            class="seat-button seat-available"
+                            name="seat_id"
+                            value="{{ seat.id }}"
+                        >
+                            <span>
+                                Seat {{ seat.seat_number }}
+                            </span>
+
+                            <small>
+                                Available
+                            </small>
+                        </button>
+
+                    {% endif %}
+
+                </form>
+
+            {% endfor %}
+
+
+            <!-- Physical Table -->
+            <div class="physical-table">
+
+                <span>
+                    Table
+                </span>
+
+                <strong>
+                    {{ table.table_number }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Review Button -->
+    {% if selected_seat_count == reservation.guest_count %}
+
+        <a
+            class="review-button"
+            href="{% url 'review_reservation' %}"
+        >
+            Review & Confirm
+        </a>
+
+    {% endif %}
+
+
+    <!-- Back to Table Selection -->
+    <a
+        class="back-link"
+        href="{% url 'table_selection' %}"
+    >
+        ← Choose a Different Table
+    </a>
+
+</main>
+
 </body>
+
 </html>

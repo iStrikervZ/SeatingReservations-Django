@@ -1,0 +1,581 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+}
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.reservation-card {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-card h1 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 32px;
+}
+
+.instructions {
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 28px;
+}
+
+.reservation-card label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.reservation-card input {
+    width: 100%;
+    min-height: 56px;
+    padding: 12px;
+    font-size: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    border: 2px solid #777;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.reservation-card button {
+    width: 100%;
+    min-height: 56px;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.error-message {
+    padding: 12px;
+    border: 2px solid #b00020;
+    border-radius: 8px;
+    font-size: 17px;
+    text-align: center;
+}
+
+.table-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.table-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.table-header h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+}
+
+.table-header p {
+    margin: 6px 0;
+    font-size: 17px;
+    line-height: 1.4;
+}
+
+.table-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.table-card {
+    min-height: 100px;
+    padding: 16px 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    text-decoration: none;
+
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+
+    color: #222;
+}
+
+.table-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.table-availability {
+    font-size: 15px;
+}
+
+.seat-page {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.seat-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.seat-header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+}
+
+.seat-header p {
+    margin: 6px 0;
+    font-size: 17px;
+}
+
+.seat-layout {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 14px;
+    margin-bottom: 20px;
+}
+
+.table-center {
+    width: 75%;
+    min-height: 70px;
+    margin: 0 auto 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 3px solid #555;
+    border-radius: 40px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.seat-form {
+    margin: 0;
+}
+
+.seat-button {
+    width: 100%;
+    min-height: 72px;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 10px;
+    border: 2px solid #777;
+
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.seat-button span {
+    margin-bottom: 4px;
+}
+
+.seat-button small {
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.seat-available {
+    background: white;
+}
+
+.seat-mine {
+    background: #d9f2df;
+    border-color: #287a3e;
+}
+
+.seat-taken {
+    background: #e5e5e5;
+    border-color: #aaa;
+    cursor: not-allowed;
+}
+
+.review-button {
+    display: block;
+    width: 100%;
+    padding: 16px;
+
+    text-align: center;
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 19px;
+    font-weight: bold;
+
+    background: #222;
+    color: white;
+
+    margin-bottom: 18px;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    font-size: 17px;
+    padding: 12px;
+    color: #222;
+}
+
+/* Physical 10-seat table diagram */
+.table-diagram {
+    display: grid;
+
+    grid-template-columns:
+        minmax(72px, 1fr)
+        minmax(72px, 1fr)
+        minmax(72px, 1fr)
+        minmax(72px, 1fr);
+
+    grid-template-rows:
+        auto
+        auto
+        auto
+        auto
+        auto;
+
+    gap: 10px;
+
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+
+/* Center Table */
+.physical-table {
+    grid-column: 2 / 4;
+    grid-row: 2 / 5;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 230px;
+
+    background: #f4f4f4;
+    border: 3px solid #555;
+    border-radius: 45px;
+
+    font-size: 18px;
+}
+
+.physical-table strong {
+    font-size: 30px;
+    margin-top: 4px;
+}
+
+
+/* Top Seats */
+.seat-position-1 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.seat-position-2 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+
+/* Right Side */
+.seat-position-3 {
+    grid-column: 4;
+    grid-row: 2;
+}
+
+.seat-position-4 {
+    grid-column: 4;
+    grid-row: 3;
+}
+
+.seat-position-5 {
+    grid-column: 4;
+    grid-row: 4;
+}
+
+
+/* Bottom Seats */
+.seat-position-6 {
+    grid-column: 3;
+    grid-row: 5;
+}
+
+.seat-position-7 {
+    grid-column: 2;
+    grid-row: 5;
+}
+
+
+/* Left Side */
+.seat-position-8 {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+.seat-position-9 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.seat-position-10 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+
+/* Make diagram seat buttons fit */
+.table-diagram .seat-button {
+    min-height: 64px;
+    padding: 7px 4px;
+    font-size: 15px;
+}
+
+.table-diagram .seat-button small {
+    font-size: 11px;
+}
+
+/* Review & Confirm Page */
+
+.review-page {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.review-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.review-header h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+}
+
+.review-header p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.review-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 18px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+}
+
+.review-card h2 {
+    margin: 0 0 18px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.review-seats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.review-seat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 64px;
+    padding: 14px 16px;
+
+    background: #f4f4f4;
+    border-radius: 8px;
+}
+
+.review-table {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.review-seat-number {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.confirm-form {
+    margin: 0 0 16px;
+}
+
+.confirm-button {
+    width: 100%;
+    min-height: 58px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #222;
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.edit-seats-link {
+    display: block;
+
+    padding: 14px;
+
+    text-align: center;
+    text-decoration: none;
+
+    color: #222;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* Confirmation Page */
+
+.confirmation-page {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 16px;
+}
+
+.confirmation-card {
+    background: white;
+
+    padding: 32px 20px;
+
+    border-radius: 12px;
+    border: 2px solid #ddd;
+
+    text-align: center;
+}
+
+.confirmation-check {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background: #d9f2df;
+    border: 3px solid #287a3e;
+
+    color: #287a3e;
+
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.confirmation-card h1 {
+    margin: 0 0 10px;
+
+    font-size: 30px;
+}
+
+.confirmation-name {
+    margin: 0 0 8px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.confirmation-message {
+    margin: 0 0 26px;
+
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.confirmed-seats {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: 26px;
+}
+
+.confirmed-seat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 64px;
+
+    padding: 14px 16px;
+
+    background: #f4f4f4;
+
+    border-radius: 8px;
+
+    font-size: 19px;
+}
+
+.confirmed-seat span,
+.confirmed-seat strong {
+    font-size: 19px;
+}
+
+.confirmation-help {
+    margin: 0;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    color: #555;
+}

@@ -1,16 +1,88 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Review Your Seats</title>
+
+    <link rel="stylesheet" href="{% static 'reservations/style.css' %}">
 </head>
+
 <body>
-{% for assignment in seat_assignments %}
-<p>Table {{assignment.seat.table.table_number}} - Seat {{assignment.seat.seat_number}}</p>
-{% endfor %}
-<form method="post">
-    {% csrf_token %}
-    <button name="confirm" value="yes">Confirm Seats</button>
-</form>
+
+<main class="review-page">
+
+    <div class="review-header">
+        <h1>Review Your Seats</h1>
+
+        <p>
+            Please make sure your seating selection is correct before confirming.
+        </p>
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error-message">
+                {{ message }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+
+    <div class="review-card">
+
+        <h2>Your Selection</h2>
+
+        <div class="review-seats">
+
+            {% for assignment in seat_assignments %}
+
+                <div class="review-seat">
+
+                    <span class="review-table">
+                        Table {{ assignment.seat.table.table_number }}
+                    </span>
+
+                    <span class="review-seat-number">
+                        Seat {{ assignment.seat.seat_number }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <form method="post" class="confirm-form">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            name="confirm"
+            value="yes"
+            class="confirm-button"
+        >
+            Confirm Seats
+        </button>
+    </form>
+
+
+    <a
+        href="{% url 'table_selection' %}"
+        class="edit-seats-link"
+    >
+        ← Go Back & Change Seats
+    </a>
+
+</main>
+
 </body>
+
 </html>

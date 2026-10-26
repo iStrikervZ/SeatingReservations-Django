@@ -1,23 +1,66 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Seats Confirmed</title>
+
+    <link rel="stylesheet" href="{% static 'reservations/style.css' %}">
 </head>
+
 <body>
-<h1>Seats Confirmed!</h1>
 
-<p>Thank you, {{ reservation.first_name }}</p>
-{% for assignment in seat_assignments %}
-<p>
-  Table {{ assignment.seat.table.table_number }}
-- Seat {{ assignment.seat.seat_number }}
-</p>
-{% endfor %}
+<main class="confirmation-page">
 
-<p> Your seating reservation has been confirmed.
-Please contact staff if you need to make any changes
-</p>
+    <div class="confirmation-card">
+
+        <div class="confirmation-check">
+            ✓
+        </div>
+
+        <h1>Seats Confirmed!</h1>
+
+        <p class="confirmation-name">
+            Thank you, {{ reservation.first_name }}.
+        </p>
+
+        <p class="confirmation-message">
+            Your seating reservation has been confirmed.
+        </p>
+
+
+        <div class="confirmed-seats">
+
+            {% for assignment in seat_assignments %}
+
+                <div class="confirmed-seat">
+
+                    <span>
+                        Table {{ assignment.seat.table.table_number }}
+                    </span>
+
+                    <strong>
+                        Seat {{ assignment.seat.seat_number }}
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <p class="confirmation-help">
+            Please contact event staff if you need to make changes to your seating reservation.
+        </p>
+
+    </div>
+
+</main>
 
 </body>
+
 </html>
