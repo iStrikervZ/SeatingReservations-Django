@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction, IntegrityError
+from django.contrib import messages
 from .models import Reservation, Table, SeatAssignment, Seat
 
 
@@ -37,7 +38,6 @@ def table_selection(request):
 
 def seat_selection(request, table_id):
     reservation_id = request.session.get("reservation_id")
-    error = None
     if not reservation_id:
         return redirect("reservation_login")
 
@@ -57,6 +57,9 @@ def seat_selection(request, table_id):
                 seat_id=remove_seat_id,
                 reservation=reservation
            ).delete()
+
+           return redirect(
+               "seat_selection", table_id=table_id)
 
 
         elif seat_id:
@@ -79,19 +82,25 @@ def seat_selection(request, table_id):
                     seat_is_taken = SeatAssignment.objects.filter(seat=seat).exists()
 
                     if seat_is_taken:
-                        error = "This seat was reserved by another guest. Please choose another seat."
+                        messages.error(request, "This seat was reserved by another guest. Please choose another seat.")
+                        return redirect("seat_selection", table_id=table_id)
 
 
                     elif current_seat_count >= locked_reservation.guest_count:
-                        error = "You have already selected the maximum number of seats."
+                        messages.error(request, "You have already selected the maximum number of seats.")
+                        return redirect("seat_selection", table_id=table_id)
 
                     else:
                         SeatAssignment.objects.create(
                             seat=seat,
                             reservation=locked_reservation
                         )
+                        return redirect(
+                            "seat_selection", table_id=table_id)
+
             except IntegrityError:
-                error = "This seat was reserved by another guest. Please choose another seat."
+                messages.error(request, "This seat was reserved by another guest. Please choose another seat.")
+                return redirect("seat_selection", table_id=table_id)
 
     selected_seat_count = SeatAssignment.objects.filter(reservation=reservation).count()
     # Get all 10 seats belonging to this table
@@ -116,7 +125,6 @@ def seat_selection(request, table_id):
             "table": table,
             "reservation":reservation,
             "selected_seat_count": selected_seat_count,
-            "error": error,
         }
     )
 

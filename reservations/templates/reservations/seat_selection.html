@@ -11,8 +11,10 @@
     <a href="{% url 'review_reservation' %}">Review & Confirm</a>
 {% endif %}
 
-{% if error %}
-<p>{{ error }}</p>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
 {% endif %}
 
 {% for seat in seats %}
