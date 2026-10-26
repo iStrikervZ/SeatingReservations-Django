@@ -14,15 +14,50 @@ class Reservation(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.reservation_code})"
 
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(
+                    guest_count__gte=1,
+                    guest_count__lte=2,
+                ),
+                name="guest_count_between_1_and_2",
+            )
+        ]
+
 
 class Table(models.Model):
-    table_number = models.PositiveIntegerField(unique=True)
+    table_number = models.PositiveIntegerField(
+        unique=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(46),
+        ]
+    )
+
     def __str__(self):
         return f"Table {self.table_number}"
 
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(
+                    table_number__gte=1,
+                    table_number__lte=46
+            ),
+            name="table_number_between_1_and_46",
+            )
+        ]
+
 class Seat(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
-    seat_number = models.PositiveIntegerField()
+    seat_number = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10)
+        ]
+    )
+
     def __str__(self):
         return f"Table {self.table.table_number} Seat {self.seat_number}"
 
@@ -31,6 +66,13 @@ class Seat(models.Model):
             models.UniqueConstraint(
                 fields=["table", "seat_number"],
                 name="unique_seat_per_table",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(
+                    seat_number__gte=1,
+                    seat_number__lte=10
+                ),
+                name="seat_number_between_1_and_10",
             )
         ]
 
