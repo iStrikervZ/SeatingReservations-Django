@@ -25,7 +25,7 @@ def table_selection(request):
     if not reservation_id:
         return redirect("reservation_login")
 
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
     if reservation.is_confirmed:
         return redirect("confirmation")
@@ -41,12 +41,12 @@ def seat_selection(request, table_id):
     if not reservation_id:
         return redirect("reservation_login")
 
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
     if reservation.is_confirmed:
         return redirect("confirmation")
 
-    table = Table.objects.get(id=table_id)
+    table = get_object_or_404(Table, id=table_id)
 
     if request.method == "POST":
         seat_id = request.POST.get("seat_id", "")
@@ -64,15 +64,16 @@ def seat_selection(request, table_id):
 
         elif seat_id:
             try:
-                with transaction.atomic():
+                with (transaction.atomic()):
                     locked_reservation = Reservation.objects.select_for_update().get(
                         id=reservation_id
                     )
 
 
-                    seat = Seat.objects.select_for_update().get(
-                        id=seat_id,
-                        table=table
+                    seat = get_object_or_404(
+                    Seat.objects.select_for_update(),
+                    id=seat_id,
+                    table=table
                     )
 
                     current_seat_count = SeatAssignment.objects.filter(
@@ -134,19 +135,27 @@ def review_reservation(request):
     if not reservation_id:
         return redirect("reservation_login")
 
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
     if reservation.is_confirmed:
         return redirect("confirmation")
 
     seat_assignments = SeatAssignment.objects.filter(reservation=reservation)
+
     if request.method == "POST":
         confirm = request.POST.get("confirm","")
 
         if confirm == "yes":
-            reservation.is_confirmed = True
-            reservation.save()
-            return redirect("confirmation")
+            selected_seat_count = seat_assignments.count()
+
+            if selected_seat_count  == reservation.guest_count:
+                reservation.is_confirmed = True
+                reservation.save()
+                return redirect("confirmation")
+
+            else:
+                messages.error(request, "Please select all required seats before confirming your reservation.")
+                return redirect("table_selection")
 
     return render(request, "reservations/review_reservation.html", {"reservation": reservation, "seat_assignments": seat_assignments})
 
@@ -156,7 +165,7 @@ def confirmation(request):
     if not reservation_id:
         return redirect("reservation_login")
 
-    reservation = Reservation.objects.get(id=reservation_id)
+    reservation = get_object_or_404(Reservation, id=reservation_id)
 
     if not reservation.is_confirmed:
         return redirect("table_selection")
