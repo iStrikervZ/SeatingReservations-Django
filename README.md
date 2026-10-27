@@ -11,4 +11,4 @@ Key Features
 - Prevention of conflicting seat assignments
 - Seat modification and confirmation
 - PostgreSQL relational data model
-- Email confirmation (once we finish it)
+- Email confirmation (in progress)
