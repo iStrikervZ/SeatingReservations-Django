@@ -1,273 +1,585 @@
+/* =========================================================
+   SEATING RESERVATION SYSTEM
+   ========================================================= */
+
+:root {
+    --navy: #16354f;
+    --navy-dark: #0e293e;
+    --navy-light: #315873;
+
+    --gold: #c98b4b;
+    --gold-light: #ead8c1;
+
+    --background: #f7f4ee;
+    --surface: #ffffff;
+    --surface-warm: #fbfaf7;
+
+    --text: #1c2c38;
+    --muted: #687782;
+
+    --border: #d9d5ce;
+    --border-dark: #bdb7ad;
+
+    --success: #27765a;
+    --success-light: #e3f1e9;
+
+    --danger: #a23d3d;
+    --danger-light: #faeaea;
+
+    --reserved: #e9e7e3;
+    --reserved-text: #777772;
+
+    --shadow-small: 0 2px 7px rgba(25, 39, 52, 0.06);
+    --shadow: 0 8px 24px rgba(25, 39, 52, 0.09);
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
 * {
     box-sizing: border-box;
 }
 
+html {
+    min-height: 100%;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    color: #222;
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
 }
+
+button,
+input {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input {
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease,
+        box-shadow 150ms ease,
+        transform 150ms ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(22, 53, 79, 0.22);
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   LOGIN / RESERVATION CODE
+   ========================================================= */
 
 .page-container {
     min-height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+
+    padding: 30px 20px;
 }
 
 .reservation-card {
     width: 100%;
     max-width: 450px;
-    background: white;
-    padding: 32px 24px;
+
+    padding: 38px 34px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-top: 5px solid var(--navy);
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    box-shadow: var(--shadow);
 }
 
 .reservation-card h1 {
-    margin-top: 0;
-    margin-bottom: 12px;
+    margin: 0 0 12px;
+
+    color: var(--navy);
+
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+
     text-align: center;
-    font-size: 32px;
 }
 
 .instructions {
+    max-width: 340px;
+
+    margin: 0 auto 30px;
+
+    color: var(--muted);
+
+    font-size: 17px;
+    line-height: 1.55;
+
     text-align: center;
-    font-size: 18px;
-    line-height: 1.5;
-    margin-bottom: 28px;
 }
 
 .reservation-card label {
     display: block;
-    font-size: 18px;
-    font-weight: bold;
+
     margin-bottom: 8px;
+
+    color: var(--navy);
+
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .reservation-card input {
     width: 100%;
-    min-height: 56px;
-    padding: 12px;
-    font-size: 24px;
+    min-height: 60px;
+
+    margin-bottom: 16px;
+    padding: 12px 16px;
+
+    background: var(--surface-warm);
+
+    border: 1px solid var(--border-dark);
+    border-radius: 6px;
+
+    color: var(--navy);
+
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 6px;
-    border: 2px solid #777;
-    border-radius: 8px;
-    margin-bottom: 18px;
+}
+
+.reservation-card input:focus {
+    background: white;
+
+    border-color: var(--navy);
+
+    box-shadow: 0 0 0 4px rgba(22, 53, 79, 0.08);
+
+    outline: none;
 }
 
 .reservation-card button {
     width: 100%;
-    min-height: 56px;
+    min-height: 58px;
+
+    padding: 14px 20px;
+
+    background: var(--navy);
+
     border: none;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
+    border-radius: 6px;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 700;
+
     cursor: pointer;
 }
 
-.error-message {
-    padding: 12px;
-    border: 2px solid #b00020;
-    border-radius: 8px;
-    font-size: 17px;
-    text-align: center;
+.reservation-card button:hover {
+    background: var(--navy-dark);
+
+    box-shadow: 0 4px 12px rgba(14, 41, 62, 0.18);
 }
+
+
+/* =========================================================
+   ERRORS / DJANGO MESSAGES
+   ========================================================= */
+
+.error-message {
+    margin: 0 0 18px;
+    padding: 13px 15px;
+
+    background: var(--danger-light);
+
+    border: 1px solid #e3b8b8;
+    border-left: 4px solid var(--danger);
+    border-radius: 5px;
+
+    color: #792d2d;
+
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   TABLE SELECTION PAGE
+   ========================================================= */
 
 .table-page {
     width: 100%;
-    max-width: 900px;
+    max-width: 1120px;
+
     margin: 0 auto;
-    padding: 24px 16px 40px;
+    padding: 44px 24px 64px;
 }
 
 .table-header {
+    max-width: 600px;
+
+    margin: 0 auto 30px;
+
     text-align: center;
-    margin-bottom: 24px;
 }
 
 .table-header h1 {
     margin: 0 0 10px;
-    font-size: 30px;
+
+    color: var(--navy);
+
+    font-size: 38px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
 }
 
 .table-header p {
-    margin: 6px 0;
+    margin: 5px 0;
+
+    color: var(--muted);
+
     font-size: 17px;
-    line-height: 1.4;
+    line-height: 1.45;
 }
+
+.table-header p:first-of-type {
+    color: var(--text);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ROOM / STAGE
+   ========================================================= */
+
+.room-layout {
+    width: 100%;
+}
+
+.stage {
+    position: relative;
+
+    width: 62%;
+    max-width: 620px;
+
+    margin: 0 auto 40px;
+    padding: 14px 24px;
+
+    background: #e6d3ba;
+
+    border: 1px solid #c6aa86;
+    border-radius: 3px;
+
+    color: var(--navy);
+
+    text-align: center;
+
+    box-shadow: 0 3px 7px rgba(70, 52, 30, 0.08);
+}
+
+.stage::after {
+    content: "";
+
+    position: absolute;
+
+    left: 8%;
+    right: 8%;
+    bottom: -7px;
+
+    height: 6px;
+
+    background: #d4c0a6;
+
+    border-radius: 0 0 3px 3px;
+}
+
+.stage span {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+}
+
+
+/* =========================================================
+   TABLE ROOM GRID
+
+   Desktop:
+   TABLE | AISLE | TABLE | AISLE | TABLE | AISLE | TABLE
+   ========================================================= */
 
 .table-grid {
+    position: relative;
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+
+    grid-template-columns:
+    minmax(150px, 1fr)
+    52px
+    minmax(150px, 1fr)
+    52px
+    minmax(150px, 1fr)
+    52px
+    minmax(150px, 1fr);
+
+    gap: 14px 8px;
 }
 
+
+/* Put tables into the four actual table columns */
+
+.table-card:nth-child(4n + 1) {
+    grid-column: 1;
+}
+
+.table-card:nth-child(4n + 2) {
+    grid-column: 3;
+}
+
+.table-card:nth-child(4n + 3) {
+    grid-column: 5;
+}
+
+.table-card:nth-child(4n + 4) {
+    grid-column: 7;
+}
+
+
+/* =========================================================
+   AISLES
+
+   Three vertical aisles:
+   between tables 1/2, 2/3, and 3/4.
+   ========================================================= */
+
+.table-grid::before {
+    display: none;
+}
+
+
+/*
+   The middle and right aisle lines use backgrounds
+   on an overlay covering the entire grid.
+*/
+
+.room-layout {
+    position: relative;
+}
+
+
+/* =========================================================
+   TABLE BUTTONS
+   ========================================================= */
+
 .table-card {
+    position: relative;
+
     min-height: 100px;
-    padding: 16px 10px;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
+    padding: 18px 12px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border-dark);
+
+    border-radius: 36px;
+
+    box-shadow: var(--shadow-small);
+
+    color: var(--text);
 
     text-align: center;
     text-decoration: none;
+}
 
-    background: white;
-    border: 2px solid #ddd;
-    border-radius: 10px;
+.table-card:hover {
+    background: #fffdfa;
 
-    color: #222;
+    border-color: var(--navy-light);
+
+    box-shadow: 0 6px 16px rgba(25, 39, 52, 0.11);
+
+    transform: translateY(-2px);
 }
 
 .table-name {
+    margin-bottom: 10px;
+
+    color: var(--navy);
+
     font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    font-weight: 750;
+    letter-spacing: -0.01em;
 }
 
 .table-availability {
-    font-size: 15px;
+    color: var(--success);
+
+    font-size: 14px;
+    font-weight: 700;
 }
+
+
+/* =========================================================
+   AISLE COLUMNS
+
+   Add the visual aisle directly to the table grid.
+   ========================================================= */
+
+.table-grid {
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            #c8c0b5 0,
+            #c8c0b5 7px,
+            transparent 7px,
+            transparent 15px
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            #c8c0b5 0,
+            #c8c0b5 7px,
+            transparent 7px,
+            transparent 15px
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            #c8c0b5 0,
+            #c8c0b5 7px,
+            transparent 7px,
+            transparent 15px
+        );
+
+    background-size:
+        1px 100%,
+        1px 100%,
+        1px 100%;
+
+    background-repeat: no-repeat;
+
+    background-position:
+        24.5% 0,
+        50% 0,
+        75.5% 0;
+}
+
+
+/*
+   Aisle labels are deliberately subtle.
+*/
+
+.table-grid::after {
+    display: none;
+}
+
+
+/* =========================================================
+   SEAT SELECTION PAGE
+   ========================================================= */
 
 .seat-page {
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
+
     margin: 0 auto;
-    padding: 24px 16px 40px;
+    padding: 42px 20px 60px;
 }
 
 .seat-header {
+    margin-bottom: 26px;
+
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .seat-header h1 {
-    margin: 0 0 8px;
-    font-size: 30px;
+    margin: 0 0 9px;
+
+    color: var(--navy);
+
+    font-size: 38px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
 }
 
 .seat-header p {
-    margin: 6px 0;
-    font-size: 17px;
+    margin: 5px 0;
+
+    color: var(--muted);
+
+    font-size: 16px;
+}
+
+.seat-header strong {
+    color: var(--navy);
 }
 
 .seat-layout {
-    background: white;
+    margin-bottom: 22px;
+    padding: 30px 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 14px;
-    margin-bottom: 20px;
+
+    box-shadow: var(--shadow-small);
 }
 
-.table-center {
-    width: 75%;
-    min-height: 70px;
-    margin: 0 auto 20px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* =========================================================
+   PHYSICAL TABLE DIAGRAM
+   ========================================================= */
 
-    border: 3px solid #555;
-    border-radius: 40px;
-
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.seat-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.seat-form {
-    margin: 0;
-}
-
-.seat-button {
-    width: 100%;
-    min-height: 72px;
-    padding: 10px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 10px;
-    border: 2px solid #777;
-
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.seat-button span {
-    margin-bottom: 4px;
-}
-
-.seat-button small {
-    font-size: 13px;
-    font-weight: normal;
-}
-
-.seat-available {
-    background: white;
-}
-
-.seat-mine {
-    background: #d9f2df;
-    border-color: #287a3e;
-}
-
-.seat-taken {
-    background: #e5e5e5;
-    border-color: #aaa;
-    cursor: not-allowed;
-}
-
-.review-button {
-    display: block;
-    width: 100%;
-    padding: 16px;
-
-    text-align: center;
-    text-decoration: none;
-
-    border-radius: 8px;
-
-    font-size: 19px;
-    font-weight: bold;
-
-    background: #222;
-    color: white;
-
-    margin-bottom: 18px;
-}
-
-.back-link {
-    display: block;
-    text-align: center;
-    font-size: 17px;
-    padding: 12px;
-    color: #222;
-}
-
-/* Physical 10-seat table diagram */
 .table-diagram {
+    width: 100%;
+    max-width: 570px;
+
     display: grid;
 
     grid-template-columns:
         minmax(72px, 1fr)
-        minmax(72px, 1fr)
-        minmax(72px, 1fr)
+        minmax(76px, 1fr)
+        minmax(76px, 1fr)
         minmax(72px, 1fr);
 
     grid-template-rows:
@@ -277,40 +589,54 @@ body {
         auto
         auto;
 
-    gap: 10px;
+    gap: 12px;
 
-    width: 100%;
-    max-width: 520px;
     margin: 0 auto;
 }
 
-
-/* Center Table */
 .physical-table {
     grid-column: 2 / 4;
     grid-row: 2 / 5;
+
+    min-height: 250px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    min-height: 230px;
+    background: #eee5d8;
 
-    background: #f4f4f4;
-    border: 3px solid #555;
-    border-radius: 45px;
+    border: 2px solid #c5b69f;
+    border-radius: 58px;
 
-    font-size: 18px;
+    color: var(--navy);
+
+    box-shadow:
+        inset 0 0 0 5px rgba(255, 255, 255, 0.32),
+        0 3px 10px rgba(60, 45, 30, 0.08);
+
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
 }
 
 .physical-table strong {
-    font-size: 30px;
-    margin-top: 4px;
+    margin-top: 5px;
+
+    color: var(--navy);
+
+    font-size: 38px;
+    line-height: 1;
 }
 
 
-/* Top Seats */
+/* =========================================================
+   SEAT POSITIONS
+   ========================================================= */
+
 .seat-position-1 {
     grid-column: 2;
     grid-row: 1;
@@ -321,8 +647,6 @@ body {
     grid-row: 1;
 }
 
-
-/* Right Side */
 .seat-position-3 {
     grid-column: 4;
     grid-row: 2;
@@ -338,8 +662,6 @@ body {
     grid-row: 4;
 }
 
-
-/* Bottom Seats */
 .seat-position-6 {
     grid-column: 3;
     grid-row: 5;
@@ -350,8 +672,6 @@ body {
     grid-row: 5;
 }
 
-
-/* Left Side */
 .seat-position-8 {
     grid-column: 1;
     grid-row: 4;
@@ -368,176 +688,347 @@ body {
 }
 
 
-/* Make diagram seat buttons fit */
-.table-diagram .seat-button {
-    min-height: 64px;
+/* =========================================================
+   SEAT BUTTONS
+   ========================================================= */
+
+.seat-form {
+    margin: 0;
+}
+
+.seat-button {
+    width: 100%;
+    min-height: 68px;
+
     padding: 7px 4px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 8px;
+
     font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
 }
 
-.table-diagram .seat-button small {
+.seat-button span {
+    margin-bottom: 3px;
+}
+
+.seat-button small {
     font-size: 11px;
+    font-weight: 600;
 }
 
-/* Review & Confirm Page */
+.seat-available {
+    background: white;
+
+    border: 1px solid #9caeb9;
+
+    color: var(--navy);
+}
+
+.seat-available:hover {
+    background: #f3f7f9;
+
+    border-color: var(--navy);
+
+    box-shadow: 0 3px 9px rgba(22, 53, 79, 0.1);
+}
+
+.seat-mine {
+    background: var(--success-light);
+
+    border: 2px solid var(--success);
+
+    color: #215c45;
+}
+
+.seat-mine small::before {
+    content: "✓ ";
+}
+
+.seat-taken {
+    background: var(--reserved);
+
+    border: 1px solid #cfcdc8;
+
+    color: var(--reserved-text);
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   REVIEW BUTTON / BACK LINK
+   ========================================================= */
+
+.review-button {
+    display: block;
+
+    width: 100%;
+
+    margin-bottom: 12px;
+    padding: 17px 20px;
+
+    background: var(--navy);
+
+    border-radius: 6px;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    text-align: center;
+    text-decoration: none;
+}
+
+.review-button:hover {
+    background: var(--navy-dark);
+
+    box-shadow: 0 4px 12px rgba(14, 41, 62, 0.18);
+}
+
+.back-link {
+    display: block;
+
+    padding: 12px;
+
+    color: var(--navy-light);
+
+    font-size: 15px;
+    font-weight: 650;
+
+    text-align: center;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: var(--navy);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   REVIEW PAGE
+   ========================================================= */
 
 .review-page {
     width: 100%;
-    max-width: 520px;
+    max-width: 560px;
+
     margin: 0 auto;
-    padding: 24px 16px 40px;
+    padding: 48px 20px 60px;
 }
 
 .review-header {
+    margin-bottom: 27px;
+
     text-align: center;
-    margin-bottom: 24px;
 }
 
 .review-header h1 {
     margin: 0 0 10px;
-    font-size: 30px;
+
+    color: var(--navy);
+
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
 }
 
 .review-header p {
-    margin: 0;
-    font-size: 17px;
-    line-height: 1.5;
+    max-width: 430px;
+
+    margin: 0 auto;
+
+    color: var(--muted);
+
+    font-size: 16px;
+    line-height: 1.55;
 }
 
 .review-card {
-    background: white;
-    border-radius: 12px;
-    padding: 22px 18px;
     margin-bottom: 20px;
-    border: 2px solid #ddd;
+    padding: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
 }
 
 .review-card h2 {
     margin: 0 0 18px;
-    text-align: center;
-    font-size: 22px;
+
+    color: var(--navy);
+
+    font-size: 20px;
 }
 
 .review-seats {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+
+    gap: 9px;
 }
 
 .review-seat {
+    min-height: 62px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    min-height: 64px;
-    padding: 14px 16px;
+    padding: 13px 16px;
 
-    background: #f4f4f4;
-    border-radius: 8px;
+    background: var(--surface-warm);
+
+    border: 1px solid #e4dfd7;
+    border-left: 4px solid var(--gold);
+    border-radius: 5px;
 }
 
 .review-table {
-    font-size: 19px;
-    font-weight: bold;
+    color: var(--navy);
+
+    font-size: 18px;
+    font-weight: 750;
 }
 
 .review-seat-number {
-    font-size: 19px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 650;
 }
 
 .confirm-form {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
 }
 
 .confirm-button {
     width: 100%;
     min-height: 58px;
 
-    border: none;
-    border-radius: 8px;
+    padding: 14px 20px;
 
-    background: #222;
+    background: var(--navy);
+
+    border: none;
+    border-radius: 6px;
+
     color: white;
 
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
 
     cursor: pointer;
+}
+
+.confirm-button:hover {
+    background: var(--navy-dark);
+
+    box-shadow: 0 4px 12px rgba(14, 41, 62, 0.18);
 }
 
 .edit-seats-link {
     display: block;
 
-    padding: 14px;
+    padding: 13px;
+
+    color: var(--navy-light);
+
+    font-size: 15px;
+    font-weight: 650;
 
     text-align: center;
     text-decoration: none;
-
-    color: #222;
-
-    font-size: 17px;
-    font-weight: bold;
 }
 
-/* Confirmation Page */
+.edit-seats-link:hover {
+    color: var(--navy);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   CONFIRMATION PAGE
+   ========================================================= */
 
 .confirmation-page {
     width: 100%;
-    max-width: 520px;
+    max-width: 560px;
+
     margin: 0 auto;
-    padding: 40px 16px;
+    padding: 58px 20px;
 }
 
 .confirmation-card {
-    background: white;
+    padding: 40px 32px;
 
-    padding: 32px 20px;
+    background: var(--surface);
 
+    border: 1px solid var(--border);
+    border-top: 5px solid var(--success);
     border-radius: 12px;
-    border: 2px solid #ddd;
+
+    box-shadow: var(--shadow);
 
     text-align: center;
 }
 
 .confirmation-check {
-    width: 70px;
-    height: 70px;
+    width: 66px;
+    height: 66px;
 
-    margin: 0 auto 18px;
+    margin: 0 auto 20px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
+    background: var(--success-light);
+
+    border: 1px solid #a8cfba;
     border-radius: 50%;
 
-    background: #d9f2df;
-    border: 3px solid #287a3e;
+    color: var(--success);
 
-    color: #287a3e;
-
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 34px;
+    font-weight: 800;
 }
 
 .confirmation-card h1 {
-    margin: 0 0 10px;
+    margin: 0 0 9px;
 
-    font-size: 30px;
+    color: var(--navy);
+
+    font-size: 34px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
 }
 
 .confirmation-name {
     margin: 0 0 8px;
 
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 19px;
+    font-weight: 700;
 }
 
 .confirmation-message {
-    margin: 0 0 26px;
+    margin: 0 auto 27px;
 
-    font-size: 17px;
+    color: var(--muted);
+
+    font-size: 16px;
     line-height: 1.5;
 }
 
@@ -545,37 +1036,277 @@ body {
     display: flex;
     flex-direction: column;
 
-    gap: 12px;
+    gap: 9px;
 
-    margin-bottom: 26px;
+    margin-bottom: 27px;
 }
 
 .confirmed-seat {
+    min-height: 62px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    min-height: 64px;
+    padding: 13px 16px;
 
-    padding: 14px 16px;
+    background: var(--surface-warm);
 
-    background: #f4f4f4;
+    border: 1px solid #e4dfd7;
+    border-left: 4px solid var(--success);
+    border-radius: 5px;
 
-    border-radius: 8px;
-
-    font-size: 19px;
+    font-size: 17px;
 }
 
-.confirmed-seat span,
+.confirmed-seat span {
+    color: var(--navy);
+
+    font-weight: 750;
+}
+
 .confirmed-seat strong {
-    font-size: 19px;
+    font-size: 17px;
 }
 
 .confirmation-help {
-    margin: 0;
+    max-width: 400px;
 
-    font-size: 15px;
-    line-height: 1.5;
+    margin: 0 auto;
+    padding-top: 20px;
 
-    color: #555;
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .table-page {
+        padding: 32px 16px 48px;
+    }
+
+    .table-header h1 {
+        font-size: 32px;
+    }
+
+    .stage {
+        width: 80%;
+
+        margin-bottom: 30px;
+    }
+
+    /*
+       Mobile simplifies the room to two table columns
+       separated by one central aisle.
+
+       TABLE | AISLE | TABLE
+    */
+
+    .table-grid {
+        grid-template-columns:
+            minmax(120px, 1fr)
+            32px
+            minmax(120px, 1fr);
+
+        gap: 12px 8px;
+
+        background-image:
+            repeating-linear-gradient(
+                to bottom,
+                #c8c0b5 0,
+                #c8c0b5 7px,
+                transparent 7px,
+                transparent 15px
+            );
+
+        background-size: 1px 100%;
+        background-position: 50% 0;
+        background-repeat: no-repeat;
+    }
+
+    .table-card:nth-child(n) {
+        grid-column: auto;
+    }
+
+    .table-card:nth-child(2n + 1) {
+        grid-column: 1;
+    }
+
+    .table-card:nth-child(2n) {
+        grid-column: 3;
+    }
+
+    .table-grid::before {
+        display: none;
+    }
+
+    .table-grid::after {
+        content: "AISLE";
+
+        top: 12px;
+        left: 50%;
+
+        width: auto;
+
+        writing-mode: vertical-rl;
+
+        transform: translateX(-50%);
+
+        font-size: 9px;
+        letter-spacing: 0.16em;
+    }
+
+    .table-card {
+        min-height: 102px;
+
+        padding: 14px 10px;
+
+        border-radius: 30px;
+    }
+
+    .seat-page {
+        padding: 32px 14px 48px;
+    }
+
+    .seat-layout {
+        padding: 22px 12px;
+    }
+
+    .table-diagram {
+        grid-template-columns:
+            minmax(65px, 1fr)
+            minmax(65px, 1fr)
+            minmax(65px, 1fr)
+            minmax(65px, 1fr);
+
+        gap: 8px;
+    }
+
+    .physical-table {
+        min-height: 225px;
+
+        border-radius: 46px;
+    }
+
+    .table-diagram .seat-button {
+        min-height: 62px;
+
+        padding: 6px 3px;
+
+        font-size: 14px;
+    }
+
+    .table-diagram .seat-button small {
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 430px) {
+
+    .reservation-card {
+        padding: 32px 22px;
+    }
+
+    .reservation-card h1 {
+        font-size: 30px;
+    }
+
+    .table-header h1,
+    .review-header h1 {
+        font-size: 30px;
+    }
+
+    .stage {
+        width: 86%;
+
+        padding: 12px;
+    }
+
+    .table-grid {
+        grid-template-columns:
+            minmax(112px, 1fr)
+            24px
+            minmax(112px, 1fr);
+
+        gap: 10px 6px;
+    }
+
+    .table-card {
+        min-height: 94px;
+
+        padding: 12px 8px;
+
+        border-radius: 27px;
+    }
+
+    .table-name {
+        margin-bottom: 7px;
+
+        font-size: 17px;
+    }
+
+    .table-availability {
+        font-size: 12px;
+    }
+
+    .seat-header h1 {
+        font-size: 32px;
+    }
+
+    .seat-layout {
+        padding: 18px 8px;
+    }
+
+    .table-diagram {
+        grid-template-columns:
+            minmax(60px, 1fr)
+            minmax(60px, 1fr)
+            minmax(60px, 1fr)
+            minmax(60px, 1fr);
+
+        gap: 6px;
+    }
+
+    .physical-table {
+        min-height: 210px;
+
+        border-radius: 40px;
+    }
+
+    .physical-table strong {
+        font-size: 32px;
+    }
+
+    .table-diagram .seat-button {
+        min-height: 59px;
+
+        font-size: 13px;
+    }
+
+    .table-diagram .seat-button small {
+        font-size: 9px;
+    }
+
+    .review-page,
+    .confirmation-page {
+        padding: 36px 16px 48px;
+    }
+
+    .confirmation-card {
+        padding: 32px 20px;
+    }
 }
