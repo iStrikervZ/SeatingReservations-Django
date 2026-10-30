@@ -22,24 +22,25 @@
         {% endfor %}
     {% endif %}
 
-  <div class="table-grid">
+<div class="room-layout">
 
-    {% for table in tables %}
+    <div class="stage">
+        <span>STAGE</span>
+    </div>
 
-        <a
-            href="{% url 'seat_selection' table.id %}"
-            class="table-card"
-        >
-            <span class="table-name">
-                Table {{ table.table_number }}
-            </span>
+    <div class="table-grid">
+        {% for table in tables %}
+            <a href="{% url 'seat_selection' table.id %}" class="table-card">
+                <span class="table-name">
+                    Table {{ table.table_number }}
+                </span>
 
-            <span class="table-availability">
-                {{ table.available_seats }} seats available
-            </span>
-        </a>
-
-    {% endfor %}
+                <span class="table-availability">
+                    {{ table.available_seats }} seats available
+                </span>
+            </a>
+        {% endfor %}
+    </div>
 
 </div>
 
